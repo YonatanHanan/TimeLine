@@ -9,9 +9,7 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "build": "tsc",
-    "watch": "tsc -w",
-    "start": "npm link && nodemon",
-    "semantic-release": "semantic-release"
+    "watch": "tsc -w"
   },
   "repository": {
     "type": "git",
@@ -30,13 +28,6 @@
     "url": "https://github.com/YonatanHanan/TimeLine/issues"
   },
   "homepage": "https://github.com/YonatanHanan/TimeLine#readme",
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm test",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "npm run lint && npm test"
-    }
-  },
   "devDependencies": {
     "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^9.0.1",
