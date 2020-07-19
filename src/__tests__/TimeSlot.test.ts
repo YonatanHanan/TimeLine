@@ -102,7 +102,7 @@ describe("getIntersection", () => {
 
     const testTs = new TimeSlot(start, end);
 
-    expect(testTs.getIntersection(ts)).toEqual(testTs);
+    expect(testTs.diff(ts)[0]).toEqual(testTs);
   });
 
   test("no intersection - after", () => {
@@ -111,7 +111,7 @@ describe("getIntersection", () => {
 
     const testTs = new TimeSlot(start, end);
 
-    expect(testTs.getIntersection(ts)).toEqual(testTs);
+    expect(testTs.diff(ts)[0]).toEqual(testTs);
   });
 
   test("intersection - after", () => {
@@ -120,9 +120,7 @@ describe("getIntersection", () => {
 
     const testTs = new TimeSlot(start, end);
 
-    expect(testTs.getIntersection(ts)).toEqual(
-      new TimeSlot(ts.end, testTs.end)
-    );
+    expect(testTs.diff(ts)[0]).toEqual(new TimeSlot(ts.end, testTs.end));
   });
 
   test("intersection - before", () => {
@@ -131,9 +129,7 @@ describe("getIntersection", () => {
 
     const testTs = new TimeSlot(start, end);
 
-    expect(testTs.getIntersection(ts)).toEqual(
-      new TimeSlot(testTs.start, ts.start)
-    );
+    expect(testTs.diff(ts)[0]).toEqual(new TimeSlot(testTs.start, ts.start));
   });
 
   test("full intersection - inside", () => {
@@ -142,7 +138,7 @@ describe("getIntersection", () => {
 
     const testTs = new TimeSlot(start, end);
 
-    expect(testTs.getIntersection(ts)).toEqual(null);
+    expect(testTs.diff(ts)).toEqual([]);
   });
 
   test("double intersection", () => {
@@ -151,11 +147,7 @@ describe("getIntersection", () => {
 
     const testTs = new TimeSlot(start, end);
 
-    expect(testTs.getIntersection(ts)![0]).toEqual(
-      new TimeSlot(testTs.start, ts.start)
-    );
-    expect(testTs.getIntersection(ts)![1]).toEqual(
-      new TimeSlot(ts.end, testTs.end)
-    );
+    expect(testTs.diff(ts)![0]).toEqual(new TimeSlot(testTs.start, ts.start));
+    expect(testTs.diff(ts)![1]).toEqual(new TimeSlot(ts.end, testTs.end));
   });
 });

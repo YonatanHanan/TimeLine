@@ -16,7 +16,7 @@ export default class TimeSlot {
   }
 
   isBefore(date: Date): boolean {
-    return date < this.start;
+    return this.start > date;
   }
 
   isAfter(date: Date): boolean {
@@ -27,7 +27,30 @@ export default class TimeSlot {
     return ts.isBetween(this.start) && ts.isBetween(this.end);
   }
 
-  getIntersection(ts: TimeSlot): TimeSlot | TimeSlot[] | null | void {
+  diff(ts: TimeSlot): TimeSlot[] {
+    if (!ts) {
+      return [];
+    }
+    //  0
+    if (!this.isBefore(ts.start) && this.isAfter(ts.start)) {
+      return [new TimeSlot(this.start, this.end)];
+    }
+    //  1
+    if (this.isBefore(ts.end) && !this.isAfter(ts.end)) {
+      return [new TimeSlot(this.start, this.end)];
+    }
+    //  2
+    if (ts.isBetween(this.start) && !this.isAfter(ts.end)) {
+      return [new TimeSlot(ts.end, this.end)];
+    }
+    //  3
+    if (!this.isBefore(ts.start) && ts.isBetween(this.end)) {
+      return [new TimeSlot(this.start, ts.start)];
+    }
+    //  4
+    if (ts.isBetween(this.start) && ts.isBetween(this.end)) {
+      return [];
+    }
     if (
       ts.isBefore(this.start) &&
       !ts.isBefore(this.end) &&
@@ -35,26 +58,10 @@ export default class TimeSlot {
       !ts.isAfter(this.start)
     ) {
       const slots = [];
-
       slots.push(new TimeSlot(this.start, ts.start));
       slots.push(new TimeSlot(ts.end, this.end));
-
       return slots;
     }
-    if (ts.isBefore(this.start) && ts.isBefore(this.end)) {
-      return new TimeSlot(this.start, this.end);
-    }
-    if (!ts.isBefore(this.start) && !ts.isAfter(this.end)) {
-      return null;
-    }
-    if (ts.isAfter(this.start) && ts.isAfter(this.end)) {
-      return new TimeSlot(this.start, this.end);
-    }
-    if (!ts.isAfter(this.start) && !this.isAfter(ts.end)) {
-      return new TimeSlot(ts.end, this.end);
-    }
-    if (ts.isBefore(this.start) && !ts.isBefore(this.end)) {
-      return new TimeSlot(this.start, ts.start);
-    }
+    return [];
   }
 }
